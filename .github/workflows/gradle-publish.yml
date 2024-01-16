@@ -4,6 +4,8 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+permissions: write-all
+#  contents: write-all
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -19,14 +21,9 @@ jobs:
           distribution: 'temurin'
 
       - name: 3. Change Execute Mode
-        run: chmod +x ./gradlew
+        run: chmod 755 gradlew
 
-      - name: 4. Build with Gradle
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-        with:
-          arguments: build
-
-      - name: 5. Install Mysql
+      - name: 4. Install Mysql
         uses: mirromutth/mysql-action@v1.1
         with:
           host port: 3306
@@ -37,7 +34,14 @@ jobs:
           mysql user: ${{ secrets.MYSQL_USER }}
           mysql password: ${{ secrets.MYSQL_USER_PASSWORD }}
 
-#    - name: 4.Publish to GitHub Packages
+      - name: 4. Build with Gradle
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        with:
+          arguments: build
+          cache-disabled: true
+          gradle-home-cache-cleanup: true
+#
+#    - name: Publish to GitHub Packages
 #      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
 #      with:
 #        arguments: publish
