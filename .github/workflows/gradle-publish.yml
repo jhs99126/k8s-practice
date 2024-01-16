@@ -26,6 +26,17 @@ jobs:
         with:
           arguments: build
 
+      - name: 5. Install Mysql
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql version: '8.0'
+          mysql database: 'istory'
+          mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          mysql user: ${{ secrets.MYSQL_USER }}
+          mysql password: ${{ secrets.MYSQL_USER_PASSWORD }}
+
 #    - name: 4.Publish to GitHub Packages
 #      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
 #      with:
